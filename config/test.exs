@@ -4,7 +4,7 @@ import Config
 # you can enable the server option below.
 config :takso, TaksoWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4001],
-  secret_key_base: "test_secret_key_base_for_testing_purposes_only",
+  secret_key_base: "R+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
   server: true
 
 # Print only warnings and errors during test

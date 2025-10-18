@@ -1,3 +1,5 @@
 defmodule TaksoWeb.PageView do
-  use TaksoWeb, :view
+  use TaksoWeb, :html
+
+  embed_templates "page/*"
 end

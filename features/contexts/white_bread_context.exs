@@ -1,14 +1,14 @@
 defmodule WhiteBreadContext do
   use WhiteBread.Context
-  # use Hound.Helpers
+  use Hound.Helpers
   
   feature_starting_state fn  ->
-    # Application.ensure_all_started(:hound)
+    Application.ensure_all_started(:hound)
     %{}
   end
   
   scenario_starting_state fn _state ->
-    # Hound.start_session
+    Hound.start_session
     %{}
   end
   
@@ -28,23 +28,23 @@ defmodule WhiteBreadContext do
   end
 
   and_ ~r/^I open STRS' web page$/, fn state ->
-    # navigate_to "/bookings/new"
+    navigate_to "/bookings/new"
     {:ok, state}
   end
 
   and_ ~r/^I enter the booking information$/, fn state ->
-    # fill_field({:id, "pickup_address"}, state[:pickup_address])
-    # fill_field({:id, "dropoff_address"}, state[:dropoff_address])
+    fill_field({:id, "pickup_address"}, state[:pickup_address])
+    fill_field({:id, "dropoff_address"}, state[:dropoff_address])
     {:ok, state}
   end
 
   when_ ~r/^I summit the booking request$/, fn state ->
-    # click({:id, "submit_button"})
+    click({:id, "submit_button"})
     {:ok, state}
   end
 
   then_ ~r/^I should receive a confirmation message$/, fn state ->
-    # assert visible_in_page? ~r/Your taxi will arrive in \d+ minutes/
+    assert visible_in_page? ~r/Your taxi will arrive in \d+ minutes/
     {:ok, state}
   end
 end
