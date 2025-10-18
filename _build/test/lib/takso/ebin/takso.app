@@ -11,6 +11,7 @@
               {modules,['Elixir.Takso.Application','Elixir.Takso.Repo',
                         'Elixir.TaksoWeb','Elixir.TaksoWeb.BookingController',
                         'Elixir.TaksoWeb.BookingHTML',
+                        'Elixir.TaksoWeb.BookingView',
                         'Elixir.TaksoWeb.Endpoint',
                         'Elixir.TaksoWeb.ErrorHTML',
                         'Elixir.TaksoWeb.ErrorHelpers',
