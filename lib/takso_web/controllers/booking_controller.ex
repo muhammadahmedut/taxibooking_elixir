@@ -2,6 +2,7 @@ defmodule TaksoWeb.BookingController do
   use TaksoWeb, :controller
 
   def new(conn, _params) do
+    csrf_token = get_csrf_token()
     html = """
     <!DOCTYPE html>
     <html>
@@ -12,6 +13,7 @@ defmodule TaksoWeb.BookingController do
       <h1>New Booking</h1>
       <p>Site under construction.</p>
       <form action="/bookings" method="post">
+        <input type="hidden" name="_csrf_token" value="#{csrf_token}">
         <input id="pickup_address" name="booking[pickup_address]" placeholder="Pickup address" required>
         <input id="dropoff_address" name="booking[dropoff_address]" placeholder="Dropoff address" required>
         <button id="submit_button" type="submit">Submit</button>
