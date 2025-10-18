@@ -18,6 +18,7 @@ defmodule TaksoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    resources "/bookings", BookingController
   end
 
   # Other scopes may use custom stacks.
