@@ -54,7 +54,7 @@ defmodule WhiteBreadContext do
 
   then_ ~r/^I should receive a confirmation message$/, fn state ->
     # Wait for redirect to complete and check home page
-    Process.sleep(100)  # Small delay to ensure redirect completes
+    :timer.sleep(500)  # Leave enough time for the server to create the flash message
     assert visible_in_page? ~r/Your taxi will arrive in \d+ minutes/
     {:ok, state}
   end

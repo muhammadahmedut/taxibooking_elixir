@@ -1,0 +1,8 @@
+<h1>New Booking</h1>
+<p>Site under construction.</p>
+<form action="/bookings" method="post">
+  <input type="hidden" name="_csrf_token" value={get_csrf_token()}>
+  <input id="pickup_address" name="booking[pickup_address]" placeholder="Pickup address" required>
+  <input id="dropoff_address" name="booking[dropoff_address]" placeholder="Dropoff address" required>
+  <button id="submit_button" type="submit">Submit</button>
+</form>
