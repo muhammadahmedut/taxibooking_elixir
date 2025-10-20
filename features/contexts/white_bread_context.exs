@@ -2,23 +2,32 @@ defmodule WhiteBreadContext do
   use WhiteBread.Context
   use Hound.Helpers
   
+  alias Takso.{Repo,Sales.Taxi}
+  
   feature_starting_state fn  ->
-    Application.ensure_all_started(:hound)
+    Application.ensure_all_started(:hound)    
     %{}
   end
   
-  scenario_starting_state fn _state ->
+  scenario_starting_state fn state ->
     Hound.start_session
+    Ecto.Adapters.SQL.Sandbox.checkout(Takso.Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(Takso.Repo, {:shared, self()})
     %{}
   end
   
-  scenario_finalize fn _status, _state -> 
+  scenario_finalize fn _status, _state ->
+    Ecto.Adapters.SQL.Sandbox.checkin(Takso.Repo)
+    # Keep browser open so you can see the rejection scenario
     # Hound.end_session
     nil
   end
 
   # Step implementations
-  given_ ~r/^the following taxis are on duty$/, fn state ->
+  given_ ~r/^the following taxis are on duty$/, fn state, %{table_data: table} ->
+    table
+    |> Enum.map(fn taxi -> Taxi.changeset(%Taxi{}, taxi) end)
+    |> Enum.each(fn changeset -> Repo.insert!(changeset) end)
     {:ok, state}
   end
 
@@ -44,7 +53,15 @@ defmodule WhiteBreadContext do
   end
 
   then_ ~r/^I should receive a confirmation message$/, fn state ->
+    # Wait for redirect to complete and check home page
+    Process.sleep(100)  # Small delay to ensure redirect completes
     assert visible_in_page? ~r/Your taxi will arrive in \d+ minutes/
+    {:ok, state}
+  end
+
+  then_ ~r/^I should receive a rejection message$/, fn state ->
+    # The rejection message is displayed directly on the page (no redirect)
+    assert visible_in_page? ~r/At present, there is no taxi available!/
     {:ok, state}
   end
 end

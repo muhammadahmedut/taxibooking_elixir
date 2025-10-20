@@ -1,5 +1,8 @@
 defmodule TaksoWeb.BookingController do
   use TaksoWeb, :controller
+  
+  alias Takso.{Repo, Sales.Taxi}
+  import Ecto.Query
 
   def new(conn, _params) do
     csrf_token = get_csrf_token()
@@ -33,9 +36,35 @@ defmodule TaksoWeb.BookingController do
     IO.puts("Pickup address: #{pickup_address}")
     IO.puts("Dropoff address: #{dropoff_address}")
     
-    # Redirect to index page with confirmation message
-    conn
-    |> put_flash(:info, "Your taxi will arrive in #{:rand.uniform(10) + 1} minutes")
-    |> redirect(to: "/")
+    # Check if any taxis are available
+    available_taxis = Repo.all(from t in Taxi, where: t.status == "available")
+    
+    # Debug: Print available taxis count
+    IO.puts("Available taxis count: #{length(available_taxis)}")
+    
+    if Enum.empty?(available_taxis) do
+      # No taxis available - show rejection message directly
+      IO.puts("No taxis available - showing rejection message")
+      html = """
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Booking Result</title>
+      </head>
+      <body>
+        <h1>Booking Result</h1>
+        <p>At present, there is no taxi available!</p>
+        <a href="/bookings/new">Try again</a>
+      </body>
+      </html>
+      """
+      html(conn, html)
+    else
+      # Taxis available - show confirmation message
+      IO.puts("Taxis available - showing confirmation message")
+      conn
+      |> put_flash(:info, "Your taxi will arrive in #{:rand.uniform(10) + 1} minutes")
+      |> redirect(to: "/")
+    end
   end
 end
